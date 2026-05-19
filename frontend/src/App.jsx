@@ -144,9 +144,13 @@ export default function App() {
             onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
             onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
             onClick={() => {
-              const newUrl = prompt("Enter your live Render backend API URL (e.g. https://your-backend.onrender.com):", API_BASE_URL);
-              if (newUrl) {
-                localStorage.setItem('VITE_API_URL', newUrl.trim().replace(/\/$/, ''));
+              const newUrl = prompt("Enter your live Render backend API URL (or leave blank and press OK to reset to default):", API_BASE_URL);
+              if (newUrl !== null) {
+                if (newUrl.trim() === '') {
+                  localStorage.removeItem('VITE_API_URL');
+                } else {
+                  localStorage.setItem('VITE_API_URL', newUrl.trim().replace(/\/$/, ''));
+                }
                 window.location.reload();
               }
             }}
