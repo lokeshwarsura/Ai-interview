@@ -241,11 +241,6 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
     }
   };
 
-  const handleAutofillIdeal = () => {
-    // Fills transcript with ideal answer for quick testing
-    const currentQ = questions[currentIdx];
-    setTranscript(currentQ.ideal_answer);
-  };
 
   if (setup) {
     return (
@@ -509,16 +504,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
           </div>
           
           <div className="form-group" style={{ flex: 1 }}>
-            <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>Your Spoken Answer Transcript</span>
-              <button 
-                type="button" 
-                style={{ background: 'none', border: 'none', color: 'var(--accent-secondary)', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }}
-                onClick={handleAutofillIdeal}
-              >
-                Autofill Ideal Answer (Testing)
-              </button>
-            </label>
+            <label className="form-label">Your Spoken Answer Transcript</label>
             <textarea 
               className="form-input" 
               style={{ width: '100%', flex: 1, resize: 'none', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: '1.6', background: 'rgba(0,0,0,0.25)' }}
