@@ -1,3 +1,16 @@
+import sys
+import os
+
+# Dynamic monorepo path shielding
+try:
+    import backend
+except ImportError:
+    try:
+        if not os.path.exists("backend"):
+            os.symlink(".", "backend")
+    except Exception:
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.app.database import engine, Base
