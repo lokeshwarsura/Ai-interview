@@ -1,0 +1,35 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+web_resources/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Python caches and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# Databases & local state
+*.db
+*.sqlite3
+.tempmediaStorage/
+
+# Environments & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Operating system files
+.DS_Store
+Thumbs.db
