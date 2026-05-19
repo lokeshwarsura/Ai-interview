@@ -159,6 +159,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
     } catch (err) {
       console.error('Error starting interview:', err);
       setSubmitting(false);
+      alert(`⚠️ Connection Error: Could not start the interview.\n\nThe frontend is currently trying to connect to the backend at:\n"${API_BASE_URL}"\n\nbut the server is offline or not responding. Please make sure your Render backend is live, and click the 'Configure Live URL' button at the bottom of the sidebar to configure it!`);
     }
   };
 

@@ -41,6 +41,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
     } catch (err) {
       console.error('Error uploading resume:', err);
       setUploading(false);
+      alert(`⚠️ Connection Error: Could not upload your resume.\n\nThe frontend is currently trying to connect to the backend at:\n"${API_BASE_URL}"\n\nbut the server is offline or not responding. Please make sure your Render backend is live, and click the 'Configure Live URL' button at the bottom of the sidebar to configure it!`);
     }
   };
 
@@ -70,6 +71,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
     } catch (err) {
       console.error('Error autofilling resume:', err);
       setUploading(false);
+      alert(`⚠️ Connection Error: Could not autofill sample resume.\n\nThe frontend is currently trying to connect to the backend at:\n"${API_BASE_URL}"\n\nbut the server is offline or not responding. Please make sure your Render backend is live, and click the 'Configure Live URL' button at the bottom of the sidebar to configure it!`);
     }
   };
 
