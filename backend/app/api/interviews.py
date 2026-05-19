@@ -191,9 +191,16 @@ async def submit_answer(request: AnswerSubmitRequest, db: Session = Depends(get_
             if request.video_metrics.smile_rate > 0.0:
                 video_metrics["smile_rate"] = request.video_metrics.smile_rate
             
-    # Combine scores to calculate answer confidence
-    # Fluency is higher when fillers are low
-    fluency_score = float(np.clip(1.0 - fillers_analysis["frequency"], 0.2, 1.0))
+    # Combine scores to calculate answer confidence and speech fluency
+    # 1. Fluency is highly sensitive to filler words (frequency amplified by 3.0x)
+    # 2. Fluency scales dynamically with answer length (must speak at least 25 words for ideal professional flow)
+    # 3. Fluency is penalized by grammatical stutters (double words)
+    total_words = len(re.findall(r"\b\w+\b", request.candidate_transcript.lower()))
+    length_factor = min(total_words / 25.0, 1.0) if total_words > 0 else 0.0
+    
+    raw_fluency = (1.0 - fillers_analysis["frequency"] * 3.0) * length_factor
+    fluency_score = float(np.clip(raw_fluency * (0.8 + 0.2 * grammar_analysis["grammar_score"]), 0.15, 1.0))
+    
     answer_confidence = float(np.clip(
         0.3 * video_metrics["eye_contact_ratio"] + 
         0.3 * speech_metrics["vocal_confidence"] + 
@@ -286,16 +293,17 @@ async def finalize_interview(session_id: int, db: Session = Depends(get_db)):
     # Compute Core Performance Dimensions (0-100)
     session.confidence_score = traits["confidence_score"]
     session.communication_score = float(np.clip(
-        0.4 * (avg_fluency * 100.0) + 
-        0.4 * avg_grammar + 
-        0.2 * (100.0 - min(total_fillers * 10.0, 80.0)), 20.0, 98.0
+        0.35 * (avg_fluency * 100.0) + 
+        0.35 * avg_grammar + 
+        0.20 * (vocal_confidence * 100.0) +
+        0.10 * (100.0 - min(total_fillers * 8.0, 70.0)), 15.0, 95.0
     ))
     # Technical score based on TF-IDF relevance and keyword matches
     session.technical_score = avg_relevance
     session.overall_score = float(np.clip(
         0.4 * session.technical_score + 
         0.3 * session.confidence_score + 
-        0.3 * session.communication_score, 20.0, 98.0
+        0.3 * session.communication_score, 15.0, 95.0
     ))
     
     # Set variables

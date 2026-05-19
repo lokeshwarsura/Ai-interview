@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Video, Mic, ArrowRight, Play, Sparkles, User, Briefcase, Clock, FileText } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function InterviewPage({ setView, setSessionId, customQuestionsPool, setCustomQuestionsPool }) {
   const [setup, setSetup] = useState(true);
@@ -129,7 +130,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
       // If we have custom questions from resume, bypass dataset fetching
       if (customQuestionsPool && customQuestionsPool.length > 0) {
         // Start interview session on server
-        const sRes = await fetch('http://localhost:8000/api/interviews/start', {
+        const sRes = await fetch(`${API_BASE_URL}/api/interviews/start`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ candidate_name: candidateName, job_role: jobRole, experience_level: experience })
@@ -142,7 +143,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
         setTimer(60);
       } else {
         // Fetch from datasets
-        const sRes = await fetch('http://localhost:8000/api/interviews/start', {
+        const sRes = await fetch(`${API_BASE_URL}/api/interviews/start`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ candidate_name: candidateName, job_role: jobRole, experience_level: experience })
@@ -199,7 +200,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
 
     // Submit answer to backend API
     try {
-      await fetch('http://localhost:8000/api/interviews/submit_answer', {
+      await fetch(`${API_BASE_URL}/api/interviews/submit_answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -223,7 +224,7 @@ export default function InterviewPage({ setView, setSessionId, customQuestionsPo
         if (streamRef.current) {
           streamRef.current.getTracks().forEach(track => track.stop());
         }
-        const finRes = await fetch(`http://localhost:8000/api/interviews/finalize/${session.session_id}`, {
+        const finRes = await fetch(`${API_BASE_URL}/api/interviews/finalize/${session.session_id}`, {
           method: 'POST'
         });
         const finData = await finRes.json();

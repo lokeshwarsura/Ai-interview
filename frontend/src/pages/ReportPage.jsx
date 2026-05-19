@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Award, CheckCircle, AlertTriangle, Lightbulb, RefreshCw, BarChart2, MessageSquare, Video, Mic, ArrowLeft } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function ReportPage({ sessionId, setView }) {
   const [report, setReport] = useState(null);
@@ -8,7 +9,7 @@ export default function ReportPage({ sessionId, setView }) {
   useEffect(() => {
     if (!sessionId) return;
     
-    fetch(`http://localhost:8000/api/interviews/report/${sessionId}`)
+    fetch(`${API_BASE_URL}/api/interviews/report/${sessionId}`)
       .then((res) => res.json())
       .then((data) => {
         setReport(data);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, FileText, CheckCircle, AlertTriangle, Briefcase, Play, HelpCircle } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function ResumePage({ setView, setCustomQuestionsPool }) {
   const [file, setFile] = useState(null);
@@ -23,7 +24,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
     formData.append('file', file);
 
     try {
-      const res = await fetch('http://localhost:8000/api/resume/upload', {
+      const res = await fetch(`${API_BASE_URL}/api/resume/upload`, {
         method: 'POST',
         body: formData
       });
@@ -31,7 +32,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
       setResumeData(data);
       
       // Fetch recommendations
-      const recsRes = await fetch(`http://localhost:8000/api/resume/recommendations/${data.id}`);
+      const recsRes = await fetch(`${API_BASE_URL}/api/resume/recommendations/${data.id}`);
       const recsData = await recsRes.json();
       setRecommendations(recsData);
       
@@ -52,7 +53,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
     formData.append('file', mockFile);
 
     try {
-      const res = await fetch('http://localhost:8000/api/resume/upload', {
+      const res = await fetch(`${API_BASE_URL}/api/resume/upload`, {
         method: 'POST',
         body: formData
       });
@@ -60,7 +61,7 @@ export default function ResumePage({ setView, setCustomQuestionsPool }) {
       setResumeData(data);
       
       // Fetch recommendations
-      const recsRes = await fetch(`http://localhost:8000/api/resume/recommendations/${data.id}`);
+      const recsRes = await fetch(`${API_BASE_URL}/api/resume/recommendations/${data.id}`);
       const recsData = await recsRes.json();
       setRecommendations(recsData);
       
